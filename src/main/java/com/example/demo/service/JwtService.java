@@ -21,17 +21,7 @@ import java.util.Map;
 @Service
 public class JwtService {
 
-    public String generateSecretKey() {
-        try {
-            KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
-            SecretKey secretKey = keyGen.generateKey();
-            System.out.println("Secret Key : " + secretKey.toString());
-            return Base64.getEncoder().encodeToString(secretKey.getEncoded());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Error generating key", e);
-        }
-    }
-
+    private final SecretKey key = Jwts.SIG.HS256.key().build();   // created ONCE
 
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>(); //claims custain custom data (eg. roles , permission)
@@ -48,10 +38,8 @@ public class JwtService {
 
     }
 
-
     private SecretKey getKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(generateSecretKey());
-        return Keys.hmacShaKeyFor(keyBytes);
+        return key;
     }
 
     public Claims extractClaims(String token) {
