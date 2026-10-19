@@ -51,7 +51,7 @@ public class config {
                 .httpBasic(Customizer.withDefaults())   // to declare authentication to basic auth
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  // to declare stateless
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                ;
+                .oauth2Login(auth -> auth.defaultSuccessUrl("/students/user",true));
 
         return http.build();
     }
